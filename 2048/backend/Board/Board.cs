@@ -1,16 +1,25 @@
 namespace Board;
+using System;
     
 public class Board {
 
     public  int[,] board {get;set;} 
     private int score;
     private int noMoves;
-    private bool[] moves;
+    public bool[] moves {get;set;} 
+    private Random random = new Random();
 
-    public Board(int[,] ints)
-    {
+    public Board(){
+        board = new int[4,4];
+        addRandom();
+        addRandom();
+        moves = new bool[]{true,true,true,true};
+    }
+
+    public Board(int[,] ints){
         board = ints;
         moves = new bool[]{true,true,true,true}; /* Left, Right, Up, Down*/
+        this.updateMoves();
     }
 
     public Board(Board b){
@@ -32,11 +41,20 @@ public class Board {
         return big;
     }
 
+    public bool canMove(){
+        for(int i = 0 ; i < 4;i++){
+            if(this.moves[i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool isEmpty(int x, int y){
         return this.board[x,y] == 0;
     }
 
-    private void updateMoves(){
+    public void updateMoves(){
         this.moves = findMoves();
     }
 
@@ -51,7 +69,6 @@ public class Board {
         return moves;
     }
     
-
     private bool canMove(bool left){
         for(int i = 0; i < 4;i++){
             if(canMoveRow(i, left)){
@@ -92,13 +109,23 @@ public class Board {
     }
 
 
-    public bool doMove(int num){
+    public bool doMoveTest(int num){
         if(num < 4 && moves[num]){
             makeMove(num);
             updateMoves();
             return true;
         } 
         return false;
+    }
+
+    public bool doMove(int num){
+    if(num < 4 && moves[num]){
+        makeMove(num);
+        addRandom();
+        updateMoves();
+        return true;
+    } 
+    return false;
     }
 
     private void makeMove(int num){
@@ -182,7 +209,6 @@ public class Board {
 
     }
 
-
     /* Rotate the board to check top and bottom are movable*/
     /* Also used to unrotate the board*/
 
@@ -196,7 +222,23 @@ public class Board {
         this.board = newBoard;
     }
 
-
+    private void addRandom(){
+        int x;
+        int num;
+        while(true){
+            x = random.Next(15); 
+            if(isEmpty(x/4, x%4)){
+                num = random.Next(4);
+                if(num == 0){
+                    num = 4;
+                } else {
+                    num = 2;
+                }
+                board[x/4, x%4] = num;
+                return; 
+            }
+        }
+    }
     
 
     
