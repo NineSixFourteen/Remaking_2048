@@ -1,0 +1,9 @@
+
+*.dll
+*.pdb
+*.exe
+*.props
+*.CopyComplete
+*.editorconfig
+*.cache
+*.dll
