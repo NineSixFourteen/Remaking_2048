@@ -1,4 +1,4 @@
-﻿using System.Reflection.Metadata;
+using System.Reflection.Metadata;
 namespace AI;
 using Board;
 using System;
@@ -6,20 +6,19 @@ public class Expectimax{
 
     public static void makeMove(Board board){
         int best = -1; 
-        int bestscore = -100000000;
-        int[] scores = new int[4]{bestscore -1,bestscore -1,bestscore -1,bestscore -1};
-        Parallel.For(0, 4, i => { 
-            if(board.moves[i]){
-                Board nBoard = new Board(board.board);
-                nBoard.doMoveTest(i);
-                scores[i] = expectmax(nBoard, 4, true);
+        int score = -100000000;
+        int i = 0;
+        foreach(bool b in board.moves){
+            if(b){
+                Board nboard = new Board(board.board);
+                nboard.doMoveTest(i);
+                int nScore = expectmax(nboard, 4, true);
+                if(nScore > score){
+                    best = i; 
+                    score = nScore;
+                }
             }
-        });
-        for(int i = 0; i < 4; i++){
-            if(scores[i] > bestscore){
-                bestscore = scores[i];
-                best = i;
-            }
+            i++;
         }
         board.doMove(best);
     }
@@ -49,29 +48,25 @@ public class Expectimax{
         int score = 0;
         if(!addRandom){
             int bestscore = -10000;
-            int[] scores = new int[4];
-            Parallel.For(0, 4, i => { 
-                if(board.moves[i]){
+            for(int i =0 ; i < 4;i++){
+                bool b = board.moves[i];
+                if(b){
                     Board nBoard = new Board(board.board);
                     nBoard.doMoveTest(i);
-                    scores[i] = expectmax(nBoard, depth-1, true);
+                    score = expectmax(nBoard, depth-1, true);
+                    bestscore = Math.Max(bestscore, score);
                 }
-            });
-            foreach(int val in scores){
-                bestscore = Math.Max(bestscore, val);
             }
             return bestscore;
         } else {
             int i = 0;
-            Parallel.ForEach(getBoards(board), 
-                nboard => {
-                    i += 1;
-                    double score2;
-                    score2 = expectmax(nboard.Item1, depth -1,false);
-                    score2 *= nboard.Item2 ? 0.9 : 0.1;
-                    score += (int) Math.Floor(score2);
-                }
-            );
+            foreach((Board, bool) nBoard in getBoards(board)){
+                i += 1;
+                double score2 = expectmax(nBoard.Item1, depth -1,false);
+                score2 *= nBoard.Item2 ? 0.9 : 0.1;
+                score += (int) Math.Floor(score2);
+            }
+
             return score / i;
         }
     }

@@ -5,6 +5,8 @@ public class Board {
 
     public  int[,] board {get;set;} 
     private int score;
+
+    public int numberOfMoves {get;set;} 
     public bool[] moves {get;set;} 
     private Random random = new Random();
 
@@ -110,6 +112,7 @@ public class Board {
     public bool doMoveTest(int num){
         if(num < 4 && moves[num]){
             makeMove(num);
+            numberOfMoves++;
             updateMoves();
             return true;
         } 
@@ -119,6 +122,7 @@ public class Board {
     public bool doMove(int num){
     if(num < 4 && moves[num]){
         makeMove(num);
+        numberOfMoves++;
         addRandom();
         updateMoves();
         return true;
