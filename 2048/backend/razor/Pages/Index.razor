@@ -1,0 +1,137 @@
+﻿@page "/"
+
+@using razor.Data
+@using Board;
+
+@inject BoardService b;
+
+<div
+    @onkeydown="@KeyboardEventHandler"
+    tabindex="0"
+    style="background-color: wheat;height:100%;"
+    class="py-3"
+>
+
+
+
+<div class="container-fluid" >
+    <div class="row">
+        <div class="col" style="text-align: center;"><button type="button" class="btn btn-dark btn-lg" style="font-size:200%;font-weight:700">AI Play</button></div>
+        <div class="col"><h1 style="text-align:center;font-size:400%">Board</h1></div>
+        <div class="col"
+         style="text-align: center;">
+         <button type="button" 
+         class="btn btn-dark btn-lg" 
+         style="font-size:200%;font-weight:700"
+         onclick="@toggleShow"
+         >Reset Game</button></div>
+    </div>
+    @for (int i = 0; i < 4; i++){
+        <div class="row px-2 my-4">
+        @for(int l = 0; l < 4; l++){
+            <div class="col">
+                @{
+                var p = dict[board.board[i,l]];
+                <div class="py-2" 
+                    style="background-color: rgb(@p.Item1, @p.Item2,@p.Item3); 
+                            color: white; text-align: center; 
+                            font-size:980%;">
+                    @board.board[i,l]
+                </div>
+                }
+
+            </div>
+        }
+        </div>
+    }
+</div>
+</div>
+
+<div class="alert alert-success" 
+    role="alert" 
+    style="
+    position: fixed;
+    visibility: @show;
+    top: 200px; left: 0;
+    width:100%
+     ">
+  <h4 class="alert-heading" style="font-size:1000%">Game Complete!</h4>
+  <p style="font-size:600%;">
+    There are no more moves <br>
+    You did a total of @board.numberOfMoves moves in x seconds <br>
+    Thats is y moves per seconds <br/>
+    Your final score was z <br/>
+    <button type="button" class="btn btn-success" style="font-size: 70%;">New Game</button>
+  </p>
+</div>
+
+@code {
+
+    private Board board;
+
+    private Dictionary<int, (int,int,int)> dict;
+
+    private void goLeft(){
+        board.board[1,1] = 2;
+    }
+    private String show = "hidden";
+
+    private void toggleShow(){
+        show = "visible";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dict = new Dictionary<int, (int,int,int)>()
+            {
+                {0, (50,50,50)},
+                {2, (31, 240, 66)},
+                {4, (25, 156, 47)},
+                {8, (4, 92, 18)},
+                {16, (4, 92, 18)},
+                {32, (10, 99, 35)},
+                {64, (57, 227, 190)},
+                {128, (29, 196, 160)},
+                {256, (13, 94, 77)},
+                {512, (42, 150, 232)},
+                {1024, (4, 92, 18)},
+                {2048, (4, 92, 18)},
+                {4096, (4, 92, 18)},
+                {8192, (4, 92, 18)},
+                {16384, (4, 92, 18)},
+                {32768, (4, 92, 18)},
+                {65536, (4, 92, 18)},
+            };
+         
+        board = await b.GetBoard();
+    }
+
+    string KeyPressed = "";
+    string EventInfo = "";
+    private void KeyboardEventHandler(KeyboardEventArgs args){
+        switch(args.Key){
+            case "ArrowLeft":
+                board.doMove(0);
+                break;
+            case "ArrowRight":
+                board.doMove(1);
+                break;
+            case "ArrowUp":
+                board.doMove(3);
+                break;
+            case "ArrowDown":
+                board.doMove(2);
+                break;
+            default: 
+                KeyPressed = args.Key;
+                break;
+        }
+        board.updateMoves();
+        if(!board.canMove()){
+            toggleShow();
+        }
+
+    }
+
+
+}

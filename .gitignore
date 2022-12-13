@@ -33,4 +33,7 @@
 2048/backend/AITests/obj/
 
 
-
+2048/backend/razor/appsettings.Development.json
+2048/backend/razor/obj/
+2048/backend/razor/bin/
+2048/backend/razor/appsettings.json
