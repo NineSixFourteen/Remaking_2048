@@ -21,4 +21,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../AI/AI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Board/Board.csproj" />
+  </ItemGroup>
+
 </Project>

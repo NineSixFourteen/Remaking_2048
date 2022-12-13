@@ -5,8 +5,8 @@ using System;
 public class Expectimax{
 
     public static void makeMove(Board board){
-        int best = 0; 
-        int score = 0;
+        int best = -1; 
+        int score = -100000000;
         int i = 0;
         foreach(bool b in board.moves){
             if(b){
@@ -48,12 +48,12 @@ public class Expectimax{
         if (board.canMove() == false) return -1000;
         int score = 0;
         if(!addRandom){
-            int bestscore = -1;
+            int bestscore = -10000;
             for(int i =0 ; i < 4;i++){
                 bool b = board.moves[i];
                 if(b){
                     Board nBoard = new Board(board.board);
-                    board.doMoveTest(i);
+                    nBoard.doMoveTest(i);
                     score = expectmax(nBoard, depth-1, true);
                     bestscore = Math.Max(bestscore, score);
                 }
@@ -63,30 +63,30 @@ public class Expectimax{
             int i = 0;
             foreach((Board, bool) nBoard in getBoards(board)){
                 i += 1;
-                score += expectmax(nBoard.Item1, depth -1,false);
+                double score2 = expectmax(nBoard.Item1, depth -1,false);
+                score2 *= nBoard.Item2 ? 0.9 : 0.1;
+                score += (int) Math.Floor(score2);
             }
 
-            return score / (i != 0 ? i : 1) ;
+            return score / i;
         }
     }
     
     private static int heur(Board board){
         int score = 0;
-        int total = 0;
-        double[,] weights = new double[,]{
-            {0.135,0.121,0.102,0.0999},
-            {0.0997,0.088,0.076,0.0724},
-            {0.0606,0.0562,0.0371,0.0161},
-            {0.0125,0.0099,0.0057,0.0033}
+        int[,] weights = new int[,]{
+            {135,121,102,99},
+            {97,88,76,73},
+            {66,56,37,16},
+            {12,9,7,3}
         };
         for(int i = 0; i < 4; i++){
             for(int l = 0; l < 4; l++){
                 int tile = board.board[i,l];
-                score += (int) ( ((double)tile) * weights[i,l]);
-                total += tile;
+                score += tile * weights[i,l];
             }
         }
-        return score + total;
+        return score;
     }
 
     private static void printBoard(Board board){

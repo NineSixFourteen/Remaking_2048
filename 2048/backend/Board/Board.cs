@@ -224,9 +224,9 @@ public class Board {
         int x;
         int num;
         while(true){
-            x = random.Next(15); 
+            x = random.Next(16); 
             if(isEmpty(x/4, x%4)){
-                num = random.Next(4);
+                num = random.Next(10);
                 if(num == 0){
                     num = 4;
                 } else {

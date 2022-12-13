@@ -8,8 +8,8 @@ public class Game {
     public static void Main(string[] args){
         Board board = new Board();
         while(board.canMove()){
-            printBoard(board);
             Expectimax.makeMove(board);
+            printBoard(board);
         }
         Console.WriteLine("done");
     }

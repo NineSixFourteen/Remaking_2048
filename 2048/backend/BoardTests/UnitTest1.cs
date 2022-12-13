@@ -78,6 +78,17 @@ public class UnitTest1{
         Assert.True(board.moves[1]);
         Assert.True(board.moves[2]);
         Assert.True(board.moves[3]);
+        board = new Board(
+            new int[,]{
+                {512,16,4,4},
+                {32,128,256,16},
+                {8,64,8,4},
+                {2,4,32,2}
+            });
+        Assert.True(board.moves[0]);
+        Assert.True(board.moves[1]);
+        Assert.True(!board.moves[2]);
+        Assert.True(!board.moves[3]);
     }
 
     [Fact]
@@ -123,7 +134,7 @@ public class UnitTest1{
         board.updateMoves();
         Assert.Equal(
             board.moves,
-            new Boolean[]{false,false,true,true}
+            new bool[]{false,false,true,true}
         );
         board = new Board(
             new int[,]{
@@ -135,7 +146,7 @@ public class UnitTest1{
         board.updateMoves();
         Assert.Equal(
             board.moves,
-            new Boolean[]{true,true,true,true}
+            new bool[]{true,true,true,true}
         );
         board = new Board(
             new int[,]{
