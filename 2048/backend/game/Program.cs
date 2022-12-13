@@ -9,7 +9,7 @@ public class Game {
         Board board = new Board();
         while(board.canMove()){
             printBoard(board);
-            AI.Expectimax.makeMove(board);
+            Expectimax.makeMove(board);
         }
         Console.WriteLine("done");
     }

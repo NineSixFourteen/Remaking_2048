@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/2048/Back/Back.csproj",
+                "${workspaceFolder}/2048/backend/game/game.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/2048/Back/Back.csproj",
+                "${workspaceFolder}/2048/backend/game/game.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/2048/Back/Back.csproj"
+                "${workspaceFolder}/2048/backend/game/game.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

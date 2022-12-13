@@ -5,7 +5,6 @@ public class Board {
 
     public  int[,] board {get;set;} 
     private int score;
-    private int noMoves;
     public bool[] moves {get;set;} 
     private Random random = new Random();
 
@@ -25,7 +24,6 @@ public class Board {
     public Board(Board b){
         this.board = b.board;
         this.moves = b.moves;
-        this.noMoves = b.noMoves;
         this.score = b.score;
     }
 
@@ -191,11 +189,11 @@ public class Board {
         while(true){
             if(dir == -1){
                 if(tile < 1){
-                    break;
+                    return;
                 }
             } else {
                 if(tile > 2){
-                    break;
+                    return;
                 }
             }
             if(board[row, tile + dir] == 0){
@@ -203,7 +201,7 @@ public class Board {
                 board[row, tile] = 0 ;
                 tile += dir;
             } else {
-                break;
+                return;
             }
         }
 

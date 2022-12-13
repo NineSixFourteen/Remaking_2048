@@ -1,4 +1,5 @@
-﻿namespace AI;
+﻿using System.Reflection.Metadata;
+namespace AI;
 using Board;
 using System;
 public class Expectimax{
@@ -11,7 +12,7 @@ public class Expectimax{
             if(b){
                 Board nboard = new Board(board.board);
                 nboard.doMoveTest(i);
-                int nScore = expectmax(nboard, 9, true);
+                int nScore = expectmax(nboard, 4, true);
                 Console.WriteLine(nScore);
                 if(nScore > score){
                     best = i; 
@@ -23,45 +24,52 @@ public class Expectimax{
         board.doMove(best);
     }
 
-    private static int expectmax(Board board, int depth, bool addRandom){
-        if (depth == 0) return heur(board);
-        if (board.canMove() == false) return -1000;
-        if(addRandom){
-            List<(Board, bool)> newBoards = new List<(Board, bool)>();
-            for(int i = 0; i < 16; i++){
-                if(board.isEmpty(i/4, i%4)){
+    private static List<(Board, bool)> getBoards(Board board){
+        List<(Board, bool)> newBoards = new List<(Board, bool)>();
+        for(int x = 0; x < 4; x++){
+            for(int y = 0; y < 4; y++){
+                if(board.isEmpty(x, y)){
                     Board nBoard = new Board(board.board);
                     Board nBoard2 = new Board(board.board);
-                    nBoard.board[i/4,i%4] = 2;
-                    nBoard2.board[i/4,i%4] = 4;
+                    nBoard.board[x,y] = 2;
+                    nBoard2.board[x,y] = 4;
+                    nBoard.updateMoves();
+                    nBoard2.updateMoves();
                     newBoards.Add((nBoard, true));
                     newBoards.Add((nBoard2, false));
                 }
             }
-            int r =0;
-            int score = 0;
-            foreach( (Board,bool) nboard in newBoards){
-                score += (int) ( ((double) expectmax(nboard.Item1, depth -1, false)) * (nboard.Item2 ? 0.8 : 0.2) );
-                r++;
-            }
-            return score /r;
-        } else{
-            board.updateMoves();
-            int i = 0;
-            int score = 0;
-            foreach(bool b in board.moves){
-                if(b){
-                    Board nboard = new Board(board.board);
-                    nboard.doMoveTest(i);
-                    int nScore = expectmax(nboard, depth - 1, true);
-                    score = Math.Max(score, nScore);
-                }
-                i++;
-            }
-            return score;
         }
+        return newBoards;
     }
 
+    private static int expectmax(Board board, int depth, bool addRandom){
+        if (depth == 0) return heur(board);
+        if (board.canMove() == false) return -1000;
+        int score = 0;
+        if(!addRandom){
+            int bestscore = -1;
+            for(int i =0 ; i < 4;i++){
+                bool b = board.moves[i];
+                if(b){
+                    Board nBoard = new Board(board.board);
+                    board.doMoveTest(i);
+                    score = expectmax(nBoard, depth-1, true);
+                    bestscore = Math.Max(bestscore, score);
+                }
+            }
+            return bestscore;
+        } else {
+            int i = 0;
+            foreach((Board, bool) nBoard in getBoards(board)){
+                i += 1;
+                score += expectmax(nBoard.Item1, depth -1,false);
+            }
+
+            return score / (i != 0 ? i : 1) ;
+        }
+    }
+    
     private static int heur(Board board){
         int score = 0;
         int total = 0;
