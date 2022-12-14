@@ -24,6 +24,28 @@ public class Expectimax{
         board.doMove(best);
     }
 
+        public static int getMove(Board board){
+        int best = -1; 
+        int bestscore = -100000000;
+        int[] scores = new int[4]{bestscore -1,bestscore -1,bestscore -1,bestscore -1};
+        Parallel.For(0, 4, i => { 
+            if(board.moves[i]){
+                Board nBoard = new Board(board.board);
+                nBoard.doMoveTest(i);
+                scores[i] = expectmax(nBoard, 4 , true);
+            }
+        });
+        for(int i = 0; i < 4; i++){
+            if(scores[i] > bestscore){
+                bestscore = scores[i];
+                best = i;
+            }
+        }
+        return best;
+    }
+
+
+
     private static List<(Board, bool)> getBoards(Board board){
         List<(Board, bool)> newBoards = new List<(Board, bool)>();
         for(int x = 0; x < 4; x++){

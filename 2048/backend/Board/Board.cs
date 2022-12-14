@@ -1,10 +1,13 @@
+using System.Diagnostics;
 namespace Board;
 using System;
     
 public class Board {
 
     public  int[,] board {get;set;} 
-    private int score;
+    public int score {get;set;} 
+    public long time {get;set;} 
+    private Stopwatch watch ;       
 
     public int numberOfMoves {get;set;} 
     public bool[] moves {get;set;} 
@@ -15,21 +18,23 @@ public class Board {
         addRandom();
         addRandom();
         moves = new bool[]{true,true,true,true};
+        watch = new System.Diagnostics.Stopwatch();
+        watch.Start();
     }
 
     public Board(int[,] ints){
         board = ints;
         moves = new bool[]{true,true,true,true}; /* Left, Right, Up, Down*/
         this.updateMoves();
+        watch = new System.Diagnostics.Stopwatch();
     }
 
     public Board(Board b){
         this.board = b.board;
         this.moves = b.moves;
         this.score = b.score;
+        watch = new System.Diagnostics.Stopwatch();
     }
-
-
 
     public int getBiggestTile(){
         int big = 0; 
@@ -50,6 +55,11 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public void setTime(){
+        watch.Stop();
+        time = watch.ElapsedMilliseconds;
     }
 
     public bool isEmpty(int x, int y){
@@ -185,6 +195,7 @@ public class Board {
         if(board[row,tile] == board[row,tile + dir]){
             board[row,tile] = 0;
             board[row,tile + dir] *= 2;
+            score += board[row,tile + dir];
         }
     }
 

@@ -1,0 +1,3 @@
+Moves : 2651
+ Time : 23441 MilliSeconds
+Score : 58124

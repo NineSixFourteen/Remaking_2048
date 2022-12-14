@@ -2,7 +2,7 @@
 
 @using razor.Data
 @using Board;
-
+@using AI;
 @inject BoardService b;
 
 <div
@@ -11,19 +11,19 @@
     style="background-color: wheat;height:100%;"
     class="py-3"
 >
-
-
-
 <div class="container-fluid" >
     <div class="row">
-        <div class="col" style="text-align: center;"><button type="button" class="btn btn-dark btn-lg" style="font-size:200%;font-weight:700">AI Play</button></div>
+        <div class="col" 
+        style="text-align: center;"
+        onclick="@AIplay"
+        ><button type="button" class="btn btn-dark btn-lg" style="font-size:200%;font-weight:700">AI Play</button></div>
         <div class="col"><h1 style="text-align:center;font-size:400%">Board</h1></div>
         <div class="col"
          style="text-align: center;">
          <button type="button" 
          class="btn btn-dark btn-lg" 
          style="font-size:200%;font-weight:700"
-         onclick="@toggleShow"
+         onclick="@reset"
          >Reset Game</button></div>
     </div>
     @for (int i = 0; i < 4; i++){
@@ -35,7 +35,8 @@
                 <div class="py-2" 
                     style="background-color: rgb(@p.Item1, @p.Item2,@p.Item3); 
                             color: white; text-align: center; 
-                            font-size:980%;">
+                            font-size:980%;"
+                    onchange="AIplay">
                     @board.board[i,l]
                 </div>
                 }
@@ -57,13 +58,21 @@
      ">
   <h4 class="alert-heading" style="font-size:1000%">Game Complete!</h4>
   <p style="font-size:600%;">
-    There are no more moves <br>
-    You did a total of @board.numberOfMoves moves in x seconds <br>
-    Thats is y moves per seconds <br/>
-    Your final score was z <br/>
-    <button type="button" class="btn btn-success" style="font-size: 70%;">New Game</button>
+    @Message
+    <br>
+    @Message2
+    <br>
+    @Message3
+    <br>
+    @Message4
+    <br>
+    <button type="button" class="btn btn-success" style="font-size: 70%;" onclick="@reset">New Game</button>
   </p>
+  <input style="visibility: hidden;" value="InputValue" onchange="@AIplay" />
+  
 </div>
+
+
 
 @code {
 
@@ -78,6 +87,19 @@
 
     private void toggleShow(){
         show = "visible";
+    }
+
+    private async void reset(){
+        board = await b.GetBoard();
+        show = "hidden";
+    }
+
+    private void AIplay(){
+        if(board.canMove()){
+            int move = Expectimax.getMove(board);
+            board.doMove(move);   
+            InputValue += "s";
+        }
     }
 
     protected override async Task OnInitializedAsync()
@@ -106,8 +128,14 @@
         board = await b.GetBoard();
     }
 
-    string KeyPressed = "";
-    string EventInfo = "";
+    
+    private string? InputValue { get; set; }
+
+    string Message = "";
+    string Message2 = "";
+    string Message3 = "";
+    string Message4 = "";
+    
     private void KeyboardEventHandler(KeyboardEventArgs args){
         switch(args.Key){
             case "ArrowLeft":
@@ -122,15 +150,27 @@
             case "ArrowDown":
                 board.doMove(2);
                 break;
+            case "l":
+                AIplay();
+                break; 
             default: 
-                KeyPressed = args.Key;
                 break;
         }
         board.updateMoves();
         if(!board.canMove()){
+            board.setTime();
             toggleShow();
+            double seconds = board.time;
+            seconds /= 1000;
+            seconds = Math.Round(seconds, 2);
+            double moves = board.numberOfMoves;
+            moves /= seconds;
+            moves = Math.Round(moves, 2);
+            Message = "There are no more moves";
+            Message2 = "You did a total of " + board.numberOfMoves + " moves in " + seconds + " seconds";
+            Message3 = "Thats is " + moves + " moves per seconds "; 
+            Message4 = "Your final score was " + board.score + "\n";               
         }
-
     }
 
 
