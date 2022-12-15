@@ -1,3 +1,31 @@
-Moves : 2651
- Time : 23441 MilliSeconds
-Score : 58124
+Moves : 1451
+Time : 22816 MilliSeconds
+Score : 27588
+Moves : 2451
+Time : 27081 MilliSeconds
+Score : 52584
+Moves : 3661
+Time : 33612 MilliSeconds
+Score : 79452
+Moves : 4708
+Time : 40024 MilliSeconds
+Score : 113324
+Moves : 1907
+Time : 20675 MilliSeconds
+Score : 36388
+Moves : 5699
+ Time : 49059 MilliSeconds
+Score : 134568
+Moves : 3833
+ Time : 36389 MilliSeconds
+Score : 82240
+Moves : 4907
+ Time : 42831 MilliSeconds
+Score : 120208
+Moves : 3178
+ Time : 34723 MilliSeconds
+Score : 69884
+Moves : 1985
+ Time : 20580 MilliSeconds
+Score : 37388
+

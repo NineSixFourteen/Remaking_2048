@@ -34,8 +34,11 @@
 
 2048/backend/Bench/bin/
 2048/backend/Bench/obj/
+2048/backend/Bench/python_ver/__pycache__
 
 2048/backend/razor/appsettings.Development.json
 2048/backend/razor/obj/
 2048/backend/razor/bin/
 2048/backend/razor/appsettings.json
+
+

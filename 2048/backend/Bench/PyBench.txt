@@ -1,0 +1,30 @@
+Moves : 1935
+Time  : 212.85659527778625 seconds 
+Score : 37000
+Moves : 3766
+Time  : 623.1616585254669 seconds 
+Score : 81372
+Moves : 3005
+Time  : 928.4238753318787 seconds 
+Score : 64252
+Moves : 3279
+Time  : 1317.6340980529785 seconds 
+Score : 71484
+Moves : 5387
+Time  : 1902.9167819023132 seconds 
+Score : 128980
+Moves : 1921
+Time  : 2198.1633718013763 seconds 
+Score : 36636
+Moves : 1970
+Time  : 2478.589464187622 seconds 
+Score : 37804
+Moves : 1904
+Time  : 2767.0786788463593 seconds 
+Score : 36480
+Moves : 1471
+Time  : 2998.174929857254 seconds 
+Score : 27816
+Moves : 2083
+Time  : 3284.512504339218 seconds 
+Score : 39736
